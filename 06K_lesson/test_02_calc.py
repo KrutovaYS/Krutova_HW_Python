@@ -5,32 +5,36 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome(
-    service=ChromeService(ChromeDriverManager().install()))
 
-wait = WebDriverWait(driver, 50)
+def test_calc():
+    driver = webdriver.Chrome(
+        service=ChromeService((ChromeDriverManager().install())))
 
-# Открываем сайт
-driver.get(
-    'https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html')
+    wait = WebDriverWait(driver, 50)
 
-# Вводим значение 45
-delay = driver.find_element(By.CSS_SELECTOR, '#delay')
-delay.clear()
-delay.send_keys('45')
+    # Открываем сайт
+    driver.get(
+        'https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html')
 
-# Нажимаем на кнопки
-driver.find_element(By.XPATH, "//span[text()='7']").click()
-driver.find_element(By.XPATH, "//span[text()='+']").click()
-driver.find_element(By.XPATH, "//span[text()='8']").click()
-driver.find_element(By.XPATH, "//span[text()='=']").click()
+    # Вводим значение 45
+    delay = driver.find_element(By.CSS_SELECTOR, '#delay')
+    delay.clear()
+    delay.send_keys('45')
 
-wait.until(
-    EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
-)
+    # Нажимаем на кнопки
+    driver.find_element(By.XPATH, "//span[text()='7']").click()
+    driver.find_element(By.XPATH, "//span[text()='+']").click()
+    driver.find_element(By.XPATH, "//span[text()='8']").click()
+    driver.find_element(By.XPATH, "//span[text()='=']").click()
 
-result = driver.find_element(By.CLASS_NAME, 'screen').text
-assert result == '15'
-print(result)
+    wait.until(
+        EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
+        )
 
-driver.quit()
+    result = driver.find_element(By.CLASS_NAME, 'screen').text
+    assert result == '15'
+
+    driver.quit()
+
+
+test_calc()
