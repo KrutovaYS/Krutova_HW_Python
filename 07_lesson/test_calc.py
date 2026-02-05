@@ -22,8 +22,8 @@ def test_calc():
     main_page.click_button('=')
 
     wait.until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
-            )
+        EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
+        )
     result = main_page.get_result()
     assert result == '15'
 
