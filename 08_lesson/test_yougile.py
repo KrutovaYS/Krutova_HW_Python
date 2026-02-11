@@ -1,10 +1,43 @@
 import pytest
+import os
+import json
 from yougileApi import YougileApi
+from yougileAuth import YougileAuth
+
+
+TOKEN_FILE = "yougile_token.json"
+
+
+@pytest.fixture(scope="session")
+def token():
+    """Создаём токен ОДИН раз и сохраняем в файл"""
+    # Пробуем прочитать существующий токен
+    if os.path.exists(TOKEN_FILE):
+        with open(TOKEN_FILE, 'r') as f:
+            data = json.load(f)
+            return data['token']
+
+    # Создаём новый токен
+    auth = YougileAuth()
+    new_token = auth.create_token()
+
+    # Сохраняем для следующих запусков
+    with open(TOKEN_FILE, 'w') as f:
+        json.dump({'token': new_token}, f)
+
+    return new_token
 
 
 @pytest.fixture
-def api():
-    return YougileApi()
+def api(token):
+    """Создаём API-клиент с готовым токеном"""
+    return YougileApi(token)
+
+
+def test_auth_and_get_token(token):
+    """Проверяем, что токен создаётся"""
+    assert token is not None
+    assert len(token) > 0
 
 
 @pytest.mark.positive
